@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs: 
+  aws-ecr: circleci/aws-ecr@8.0.0
+
 jobs:
   check-linting:
     docker:
@@ -21,3 +24,9 @@ workflows:
   default:
     jobs:
       - check-linting
+      - aws-ecr/build-and-push-image:
+          create-repo: true
+          repo: nginx-hello-world
+          tag: 'latest,$CIRCLE_WORKFLOW_ID'
+
+          requires: [check-linting]
