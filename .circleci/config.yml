@@ -1,0 +1,23 @@
+version: 2.1
+
+jobs:
+  check-linting:
+    docker:
+      - image: alpine
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # Install hadolint
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            chmod +x /bin/hadolint
+      - run:
+          name: Run lint
+          command: |
+            hadolint Dockerfile
+
+workflows:
+  default:
+    jobs:
+      - check-linting
